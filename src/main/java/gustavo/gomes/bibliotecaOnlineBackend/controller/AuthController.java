@@ -131,6 +131,7 @@ public class AuthController {
     private Cookie createSessionCookie(HttpServletRequest request) {
         Cookie cookie = new Cookie("JSESSIONID", request.getSession().getId());
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);  // Define o cookie como seguro para HTTPS
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60); // 1 hora
         return cookie;
