@@ -19,4 +19,4 @@ public class ScheduledTaskService {
         authController.test();
     }
 }
-}
+
