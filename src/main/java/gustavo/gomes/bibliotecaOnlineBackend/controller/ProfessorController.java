@@ -5,7 +5,6 @@ import gustavo.gomes.bibliotecaOnlineBackend.model.Professor;
 import gustavo.gomes.bibliotecaOnlineBackend.model.TipoAtivo;
 import gustavo.gomes.bibliotecaOnlineBackend.service.ProfessorService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +44,16 @@ public class ProfessorController {
         // Verifica se o usuário está autenticado na sessão
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return ResponseEntity.status(401).build(); // Retorna 401 Unauthorized
+        }
+
+        // Verifica se o corpo da solicitação está nulo
+        if (professorDTO == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Os dados do professor não podem ser nulos."));
+        }
+
+        // Verifica se campos obrigatórios estão presentes
+        if (professorDTO.getUsuarioProfessor() == null || professorDTO.getSenhaProfessor() == null || professorDTO.getNumeroDocumento() == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Os campos 'usuarioProfessor', 'senhaProfessor' e 'numeroDocumento' são obrigatórios."));
         }
 
         // Verifica se o usuarioProfessor (email) já existe
