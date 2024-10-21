@@ -12,9 +12,9 @@ public class ScheduledTaskUtil {
     private RestTemplate restTemplate;
 
     // URL do seu endpoint
-    private static final String TEST_URL = "http://localhost:8080/api/auth/test"; // Altere para o URL apropriado
+    private static final String TEST_URL = "https://biblioteca-online-backend-production.up.railway.app/api/auth/test"; // Altere para o URL apropriado
 
-    @Scheduled(fixedRate = 10000) // 12 horas em milissegundos
+    @Scheduled(fixedRate = 43200000) // 12 horas em milissegundos
     public void executeTest() {
         try {
             String response = restTemplate.getForObject(TEST_URL, String.class);
