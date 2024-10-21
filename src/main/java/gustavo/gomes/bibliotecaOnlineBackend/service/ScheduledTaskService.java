@@ -12,7 +12,7 @@ public class ScheduledTaskService {
     private AuthController authController; // Injetando o AuthController
 
     // Método que será executado a cada 12 horas
-    @Scheduled(fixedRate = 43200000) // 12 horas em milissegundos
+    @Scheduled(fixedRate = 10000) // 12 horas em milissegundos
     public void executeTask() {
         System.out.println("Executando tarefa agendada a cada 12 horas...");
         // Chame o método test() do AuthController
