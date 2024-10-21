@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import gustavo.gomes.bibliotecaOnlineBackend.repository.AlunoLivroRepository;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,10 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private AlunoLivroRepository alunoLivroRepository;
+
 
     public List<Aluno> getAllAlunos() {
         return alunoRepository.findAll();
@@ -30,11 +36,24 @@ public class AlunoService {
     }
 
     public void deleteById(int id) {
+        Optional<Aluno> aluno = alunoRepository.findById(id);
         // Verifica se o aluno existe antes de deletar
-        if (!alunoRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado para exclusão.");
+            if (!alunoRepository.existsById(id)) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não existe.");
+            }
+
+            if (aluno.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado para exclusão.");
+            }
+
+        try {
+            alunoRepository.deleteById(id);
+
+        } catch (ResponseStatusException e) {
+            throw e; // Repassa o erro se for 404 ou 409
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao tentar excluir o aluno.", e);
         }
-        alunoRepository.deleteById(id);
     }
 
     public Optional<Aluno> findByNomeAluno(String nomeAluno) {

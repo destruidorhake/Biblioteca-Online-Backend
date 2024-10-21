@@ -48,14 +48,23 @@ public class AlunoController {
     public ResponseEntity<String> deleteById(@PathVariable int id) {
         try {
             alunoService.deleteById(id);
-            return ResponseEntity.noContent().build(); // 204 - Sucesso
+            return ResponseEntity.noContent().build(); // 204 - Sucesso sem conteúdo
+
         } catch (ResponseStatusException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+            HttpStatus status = HttpStatus.valueOf(e.getStatusCode().value()); // Converte HttpStatusCode para HttpStatus
+
+            if (status == HttpStatus.NOT_FOUND) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado.");
+            } else if (status == HttpStatus.CONFLICT) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Existem relações vinculadas que impedem a exclusão deste aluno.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao tentar excluir o aluno.");
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao tentar excluir o aluno.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno do servidor.");
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Aluno> findById(@PathVariable int id) {
