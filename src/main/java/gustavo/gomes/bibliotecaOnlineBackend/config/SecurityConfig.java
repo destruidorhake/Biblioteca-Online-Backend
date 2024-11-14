@@ -66,7 +66,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://biblioteca-online-delta.vercel.app"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://biblioteca-online-delta.vercel.app"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-xsrf-token"));
         configuration.setAllowCredentials(true);  // Permitir cookies com HTTPS
